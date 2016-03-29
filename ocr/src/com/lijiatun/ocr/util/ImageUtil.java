@@ -15,7 +15,7 @@ import javax.imageio.stream.ImageInputStream;
 
 public class ImageUtil {
 	/**
-	 * 扫描打印图片
+	 * 扫描打印图片1
 	 * 
 	 * @param file
 	 * @throws Exception
