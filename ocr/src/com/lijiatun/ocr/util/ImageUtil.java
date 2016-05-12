@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.math.BigDecimal;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
@@ -317,6 +318,44 @@ public class ImageUtil {
 		su.append(b);
 		// 0xFF0000FF
 		return su.toString();
+	}
+	/**
+	 * 生成300k以下图片
+	 * 设置72dpi的图像
+	 * file 原文件，newFile 生成的文件
+	 */
+	public static void save72DPIJpgImage(File file,File newFile) throws Exception 
+	{
+		/**
+		 * 用来处理图片的缓冲流
+		 */
+		BufferedImage bi = null;
+		/**
+		 * 用ImageIO将图片读入到缓冲中
+		 */
+		bi = ImageIO.read(file);
+		int width = bi.getWidth(null);    // 得到源图宽  
+		int height = bi.getHeight(null);  // 得到源图长
+		int maxWidth = width;
+		int maxHeight = height;
+		if(file.length()/1024>300)
+		{
+			BigDecimal ratio=new BigDecimal(height).divide(new BigDecimal(width),2,BigDecimal.ROUND_HALF_DOWN);//源图片长宽比
+			BigDecimal max=new BigDecimal(1550000);//300K图片的长宽积   接近值
+			maxWidth = (int)(Math.sqrt((max.divide(ratio,2,BigDecimal.ROUND_HALF_DOWN)).doubleValue()));
+			maxHeight = new BigDecimal(maxWidth).multiply(ratio).intValue();
+		}
+		/**
+		 * 将缓冲对象保存到新文件中
+		 */
+		BufferedImage image = new BufferedImage(maxWidth, maxHeight,BufferedImage.TYPE_INT_RGB );   
+		image.getGraphics().drawImage(bi, 0, 0, maxWidth, maxHeight, null); // 绘制缩小后的图
+
+		FileOutputStream ops = new FileOutputStream(newFile);
+		ImageIO.write(image, "jpg", ops);
+		ops.flush();
+		ops.close();
+
 	}
 
 }

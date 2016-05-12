@@ -55,5 +55,21 @@ public class ImageUtilTest {
 			System.out.println("图片扫码错误:"+e);
 		}
 	}
+	/**
+	 * 测试转化为黑白照片
+	 */
+	@Test
+	public void testSave72DPIJpgImage()
+	{
+		File file = new File("D://挂靠协议1-1.jpg");
+		try 
+		{
+			ImageUtil.save72DPIJpgImage(file,file);
+		} 
+		catch (Exception e) 
+		{
+			System.out.println("生成72dpi的jpg图片错误:"+e);
+		}
+	}
 
 }
